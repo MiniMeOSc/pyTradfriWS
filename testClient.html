@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket test</title>
+    </head>
+    <body>
+        <textarea cols="100" rows="10"></textarea>
+        <br />
+        <button onclick="send()">Send</button><button onclick="close()">Close</button>
+        <script>
+            var ws = new WebSocket("ws://" + window.location.host + ":5678/"),
+            messages = document.createElement('ul');
+            ws.onmessage = function (event) {
+                var messages = document.getElementsByTagName('ul')[0],
+                message = document.createElement('li'),
+                content = document.createTextNode(event.data);
+                message.appendChild(content);
+                messages.appendChild(message);
+            };
+            document.body.appendChild(messages);
+            ws.onclose = function() {
+                alert('WebSocket closed');
+            }
+
+            function send() {
+                var message = document.querySelector('textarea').value;
+                ws.send(message);
+            }
+
+            function close() {
+                ws.close();
+            }
+        </script>
+    </body>
+</html>
